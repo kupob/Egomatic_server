@@ -1,2 +1,2 @@
 # Egomatic_server
-Server part of egomatic
+Server part of Egomatic - automatic pub project
