@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 import sys
-# import psycopg2
-from psycopg2 import *
-# from psycopg2 import extras as _extras
+import psycopg2
+from psycopg2 import extras as _extras
 
-'''
+
 class Database:
     def __init__(self):
         self.connection = None
 
     def createConnection(self, hostName, dataBaseName, login, password, port=None):
         try:
-            # log.printlog(u'Попытка соединения с БД %s : %s' % (hostName, dataBaseName), u"INFO")
+            print(u'Попытка соединения с БД %s : %s' % (hostName, dataBaseName), u"INFO")
             self.connection = psycopg2.connect(
                 host=hostName,
                 database=dataBaseName,
@@ -20,12 +19,12 @@ class Database:
                 port=port)
 
             # if port:
-            # log.printlog(u'Подключились %s/%s : %s' % (hostName, port, dataBaseName), u"INFO")
+            print(u'Подключились %s/%s : %s' % (hostName, port, dataBaseName), u"INFO")
             # else:
-            # log.printlog(u'Подключились %s : %s' % (hostName, dataBaseName), u"INFO")
+            print(u'Подключились %s : %s' % (hostName, dataBaseName), u"INFO")
 
         except psycopg2.DatabaseError, e:
-            # log.printlog(u'Ошибка подключения к базе данных %s' % str(e), u"ERROR")
+            print(u'Ошибка подключения к базе данных %s' % str(e), u"ERROR")
             sys.exit(-1)
 
     def getConnection(self):
@@ -43,4 +42,4 @@ class Database:
         else:
             cursor.execute(select)
         return cursor.fetchall()
-'''
+
