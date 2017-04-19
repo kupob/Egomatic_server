@@ -9,6 +9,7 @@ class ConfigReader:
         __DB_PORT = 0
         __DB_USER = ""
         __DB_PASSWORD = ""
+        __DB_NAME = ""
 
         def __init__(self):
             file_name = './db_settings.conf'
@@ -30,6 +31,8 @@ class ConfigReader:
                         self.__DB_USER = line_split[1]
                     elif line_split[0] == "DB_PASSWORD":
                         self.__DB_PASSWORD = line_split[1]
+                    elif line_split[0] == "DB_NAME":
+                        self.__DB_NAME = line_split[1]
 
         def get_db_host(self):
             return self.__DB_HOST
@@ -42,6 +45,9 @@ class ConfigReader:
 
         def get_db_password(self):
             return self.__DB_PASSWORD
+
+        def get_db_name(self):
+            return self.__DB_NAME
 
     instance = None
 
