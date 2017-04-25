@@ -1,20 +1,24 @@
 # -*- coding: utf-8 -*-
 
 import socket
-from constants import *
 from threading import *
 from collections import deque
 
 
 class NetworkReceiver(Thread):
     cs = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server_port = 0
 
     message_deque = deque([])
+
+    def __init__(self, server_port):
+        self.server_port = server_port
+        Thread.__init__(self)
 
     def run(self):
         try:
             self.cs.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            self.cs.bind(('', SERVER_PORT))
+            self.cs.bind(('', self.server_port))
 
             while True:
                 message = self.cs.recv(1024)

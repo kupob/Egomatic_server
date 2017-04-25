@@ -6,7 +6,7 @@ from network_receiver import *
 from constants import *
 
 config = ConfigReader()
-net_receiver = NetworkReceiver()
+net_receiver = NetworkReceiver(config.get_server_port())
 net_receiver.daemon = True
 net_receiver.start()
 
@@ -24,7 +24,11 @@ while True:
         message = net_receiver.get_message()
         message_split = message.split()
 
-        if message_split[1] == MSG_FLOW:
+        message_type = int(message_split[1])
+
+        if message_type == config.get_message_type('MSG_FLOW'):
             print u'Received flow from ' + message_split[0] + ' pin ' + message_split[2] + ' value ' + message_split[3]
+        elif message_type == config.get_message_type('MSG_RFID'):
+            print u'Received RFID from ' + message_split[0] + ' value ' + message_split[2]
         else:
             print message

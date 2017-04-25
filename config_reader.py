@@ -10,9 +10,11 @@ class ConfigReader:
         __DB_USER = ""
         __DB_PASSWORD = ""
         __DB_NAME = ""
+        __SERVER_PORT = 0
+        __MSG_TYPES = {}
 
         def __init__(self):
-            file_name = './db_settings.conf'
+            file_name = './settings.conf'
 
             if os.path.isfile(file_name):
                 conf_file = open(file_name, 'r')
@@ -21,18 +23,28 @@ class ConfigReader:
                         continue
 
                     line_split = line.split()
+
                     if not line_split:
                         continue
-                    if line_split[0] == 'DB_HOST':
-                        self.__DB_HOST = line_split[1]
-                    elif line_split[0] == "DB_PORT":
-                        self.__DB_PORT = int(line_split[1])
-                    elif line_split[0] == "DB_USER":
-                        self.__DB_USER = line_split[1]
-                    elif line_split[0] == "DB_PASSWORD":
-                        self.__DB_PASSWORD = line_split[1]
-                    elif line_split[0] == "DB_NAME":
-                        self.__DB_NAME = line_split[1]
+
+                    code = line_split[0]
+                    value = line_split[1]
+
+                    if code == 'DB_HOST':
+                        self.__DB_HOST = value
+                    elif code == "DB_PORT":
+                        self.__DB_PORT = int(value)
+                    elif code == "DB_USER":
+                        self.__DB_USER = value
+                    elif code == "DB_PASSWORD":
+                        self.__DB_PASSWORD = value
+                    elif code == "DB_NAME":
+                        self.__DB_NAME = value
+                    elif code == "SERVER_PORT":
+                        self.__SERVER_PORT = int(value)
+                    elif code[0:4] == "MSG_":
+                        self.__MSG_TYPES[code] = int(value)
+
 
         def get_db_host(self):
             return self.__DB_HOST
@@ -48,6 +60,12 @@ class ConfigReader:
 
         def get_db_name(self):
             return self.__DB_NAME
+
+        def get_server_port(self):
+            return self.__SERVER_PORT
+
+        def get_message_type(self, message_type):
+            return self.__MSG_TYPES.get(message_type, -1)
 
     instance = None
 
