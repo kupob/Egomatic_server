@@ -1,37 +1,31 @@
 # -*- coding: utf-8 -*-
 
-from database_adapter import *
 from config_reader import *
 from network_receiver import *
-from constants import *
+from processor import *
 
 config = ConfigReader()
 net_receiver = NetworkReceiver(config.get_server_port())
 net_receiver.daemon = True
 net_receiver.start()
 
-database = Database()
-database.createConnection(config.get_db_host(),
-                          config.get_db_name(),
-                          config.get_db_user(),
-                          config.get_db_password(),
-                          port=config.get_db_port())
+processor = Processor()
 
 # main loop
 while True:
 
     while net_receiver.is_message_come():
-        message = net_receiver.get_message()
+        message_and_address = net_receiver.get_message()
+        message = message_and_address[0]
+        address = message_and_address[1]
         message_split = message.split()
 
-        message_type = int(message_split[1])
+        message_type = int(message_split[0])
 
         if message_type == config.get_message_type('MSG_RFID'):
-            print u'Received RFID from ' + message_split[0] + ' value ' + message_split[2]
-            # result = database.getResult('SELECT * FROM em_customer WHERE rfid = %s LIMIT 1;' % message_split[2])
-
-            # print result
+            print u'Received RFID from ' + str(address) + ' value ' + message_split[1]
+            processor.init_customer(message_split[1], address)
         elif message_type == config.get_message_type('MSG_FLOW'):
-            print u'Received flow from ' + message_split[0] + ' pin ' + message_split[2] + ' value ' + message_split[3]
+            print u'Received flow from ' + str(address) + ' pin ' + message_split[1] + ' value ' + message_split[2]
         else:
             print message

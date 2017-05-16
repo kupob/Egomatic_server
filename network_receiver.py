@@ -7,6 +7,8 @@ from collections import deque
 
 class NetworkReceiver(Thread):
     cs = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    conn = None
+    addr = None
     server_port = 0
 
     message_deque = deque([])
@@ -21,9 +23,9 @@ class NetworkReceiver(Thread):
             self.cs.bind(('', self.server_port))
 
             while True:
-                message = self.cs.recv(1024)
+                message, address = self.cs.recvfrom(1024)
                 if message:
-                    self.message_deque.append(message)
+                    self.message_deque.append((message, address))
 
         except socket.error, exc:
             print "Caught exception socket.error : %s" % exc
