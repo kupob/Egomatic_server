@@ -1,71 +1,43 @@
 # -*- coding: utf-8 -*-
 
 import os.path
+import ConfigParser
 
 
 class ConfigReader:
     class __ConfigReader:
-        __DB_HOST = ""
-        __DB_PORT = 0
-        __DB_USER = ""
-        __DB_PASSWORD = ""
-        __DB_NAME = ""
-        __SERVER_PORT = 0
-        __MSG_TYPES = {}
+        config_parser = ConfigParser.ConfigParser()
 
         def __init__(self):
-            file_name = './settings.conf'
-
-            if os.path.isfile(file_name):
-                conf_file = open(file_name, 'r')
-                for line in conf_file:
-                    if line[0] == '#':
-                        continue
-
-                    line_split = line.split()
-
-                    if not line_split:
-                        continue
-
-                    code = line_split[0]
-                    value = line_split[1]
-
-                    if code == 'DB_HOST':
-                        self.__DB_HOST = value
-                    elif code == "DB_PORT":
-                        self.__DB_PORT = int(value)
-                    elif code == "DB_USER":
-                        self.__DB_USER = value
-                    elif code == "DB_PASSWORD":
-                        self.__DB_PASSWORD = value
-                    elif code == "DB_NAME":
-                        self.__DB_NAME = value
-                    elif code == "SERVER_PORT":
-                        self.__SERVER_PORT = int(value)
-                    elif code[0:4] == "MSG_":
-                        self.__MSG_TYPES[code] = int(value)
-
+            # self.config_parser.readfp(open())
+            self.config_parser.read(['./server_config.ini',  '../config.ini', '../message_types.ini'])
 
         def get_db_host(self):
-            return self.__DB_HOST
+            return self.config_parser.get("Database", "DB_HOST")
 
         def get_db_port(self):
-            return self.__DB_PORT
+            return self.config_parser.getint("Database", "DB_PORT")
 
         def get_db_user(self):
-            return self.__DB_USER
+            return self.config_parser.get("Database", "DB_USER")
 
         def get_db_password(self):
-            return self.__DB_PASSWORD
+            return self.config_parser.get("Database", "DB_PASSWORD")
 
         def get_db_name(self):
-            return self.__DB_NAME
+            return self.config_parser.get("Database", "DB_NAME")
 
         def get_server_port(self):
-            return self.__SERVER_PORT
+            return self.config_parser.getint("General", "SERVER_PORT")
+
+        def get_general(self, field):
+            return self.config_parser.get("General", field)
+
+        def get_general_int(self, field):
+            return self.config_parser.getint("General", field)
 
         def get_message_type(self, message_type):
-            return self.__MSG_TYPES.get(message_type, -1)
+            return self.config_parser.getint("MessageTypes", message_type)
 
     instance = None
 

@@ -27,5 +27,8 @@ while True:
             processor.init_customer(message_split[1], address)
         elif message_type == config.get_message_type('MSG_FLOW'):
             print u'Received flow from ' + str(address) + ' pin ' + message_split[1] + ' value ' + message_split[2]
+        elif message_type == config.get_message_type('MSG_PRICES_REQUEST'):
+            print u'Received price request from ' + str(address)
+            processor.send_prices(address)
         else:
-            print message
+            print 'Recv ' + message
