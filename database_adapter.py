@@ -34,17 +34,22 @@ class Database:
         if self.connection:
             self.connection.close()
 
-    def get_result(self, select, parameters=None):
+    def get_result(self, query, parameters=None):
+        print query
         cursor = self.connection.cursor(cursor_factory=_extras.DictCursor)
         # Если переданы параметры, запрос выполняется с параметрами
         if parameters:
-            cursor.execute(select, parameters)
+            cursor.execute(query, parameters)
         else:
-            cursor.execute(select)
-        return cursor.fetchall()
+            cursor.execute(query)
 
-    def get_single_result(self, select, parameters=None):
-        result = self.get_result(select, parameters)
+        if cursor.description is None:
+            self.connection.commit()
+        else:
+            return cursor.fetchall()
+
+    def get_single_result(self, query, parameters=None):
+        result = self.get_result(query, parameters)
         if result:
             return result[0]
         else:

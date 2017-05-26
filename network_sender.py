@@ -18,7 +18,7 @@ class NetworkSender(Thread):
         self.cs.bind(('', self.config.get_server_port()))
 
         while True:
-            if self.message_deque:
+            while self.message_deque:
                 queued_message = self.message_deque.popleft()
                 address = queued_message[0]
                 message = ' '.join(str(x) for x in queued_message[1:])
@@ -31,5 +31,5 @@ class NetworkSender(Thread):
     def send_prices(self, address, prices):
         self.message_deque.append([address, self.config.get_message_type('MSG_PRICES'), prices])
 
-    def send_balance(self, address, balance):
-        self.message_deque.append([address, self.config.get_message_type('MSG_BALANCE'), balance])
+    def send_balance(self, address, balance, customer_id):
+        self.message_deque.append([address, self.config.get_message_type('MSG_BALANCE'), balance, customer_id])
