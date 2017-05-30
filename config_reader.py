@@ -30,6 +30,9 @@ class ConfigReader:
         def get_server_port(self):
             return self.config_parser.getint("General", "SERVER_PORT")
 
+        def get_flowmeter_port(self):
+            return self.config_parser.getint("General", "FLOWMETER_PORT")
+
         def get_general(self, field):
             return self.config_parser.get("General", field)
 

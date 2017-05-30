@@ -18,6 +18,8 @@ class Database:
                 password=password,
                 port=port)
 
+            self.connection.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+
             # if port:
             # print(u'Подключились %s/%s : %s' % (hostName, port, dataBaseName), u"INFO")
             # else:
